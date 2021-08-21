@@ -1,37 +1,30 @@
 import React from 'react';
+import axios from 'axios';
 import BasicTable from '../components/BasicTable';
-
-const data = [
-  {
-    key: '1',
-    firstName: 'John',
-    lastName: 'Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    firstName: 'Jim',
-    lastName: 'Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    firstName: 'Joe',
-    lastName: 'Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
-
 class Workspace extends React.Component {
+
+  state = {
+    bonds: []
+  }
+  componentDidMount() {
+    axios.get('http://127.0.0.1:8000/api/bond/list-create/')
+    .then(res => {
+      const results = res.data.map(row => ({
+         key: row.id, // add this for the data-row-key
+         ...row
+      }))
+      this.setState({
+        bonds: results
+      });
+    })
+  }
+
   render() {
     return (
-      <BasicTable data={data} />
+      <>
+        <h1>Buy Bonds</h1>
+        <BasicTable data={this.state.bonds} />
+      </>
     );
   }
 }

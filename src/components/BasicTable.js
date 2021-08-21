@@ -1,43 +1,29 @@
-import React from 'react';
-import { Table, Tag, Space } from 'antd';
+import React from "react";
+import { Table, Space } from "antd";
 
-const { Column, ColumnGroup } = Table;
+const { Column } = Table;
 
 const BasicTable = (props) => {
-    return(
-        <Table dataSource={props.data}>
-            <ColumnGroup title="Name">
-            <Column title="First Name" dataIndex="firstName" key="firstName" />
-            <Column title="Last Name" dataIndex="lastName" key="lastName" />
-            </ColumnGroup>
-            <Column title="Age" dataIndex="age" key="age" />
-            <Column title="Address" dataIndex="address" key="address" />
-            <Column
-            title="Tags"
-            dataIndex="tags"
-            key="tags"
-            render={tags => (
-                <>
-                {tags.map(tag => (
-                    <Tag color="blue" key={tag}>
-                    {tag}
-                    </Tag>
-                ))}
-                </>
-            )}
-            />
-            <Column
-            title="Action"
-            key="action"
-            render={(text, record) => (
-                <Space size="middle">
-                <a href="/">Invite {record.lastName}</a>
-                <a href="/">Delete</a>
-                </Space>
-            )}
-            />
-        </Table>
-    );
-}
+  return (
+    <Table dataSource={props.data}>
+      <Column title="ID" dataIndex="id" key="id" />
+      <Column title="Name" dataIndex="name" key="name" />
+      <Column title="Price" dataIndex="price" key="price" />
+      <Column title="Currency" dataIndex="currency" key="currency" />
+      <Column title="Number" dataIndex="total" key="total" />
+      <Column title="Seller" dataIndex="seller" key="seller" />
+      <Column
+        title="Action"
+        key="action"
+        render={(text, record) => (
+          <Space size="middle">
+            <a href={`/bond/${record.id}`}>Detalles</a>
+            <a href="/">Comprar</a>
+          </Space>
+        )}
+      />
+    </Table>
+  );
+};
 
 export default BasicTable;
