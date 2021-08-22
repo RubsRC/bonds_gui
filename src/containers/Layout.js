@@ -1,6 +1,8 @@
 import React from "react";
 import { Layout, Menu, Breadcrumb } from "antd";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import * as actions from "../store/actions/auth";
 
 const { Header, Content, Footer } = Layout;
 const CustomLayout = (props) => {
@@ -16,7 +18,7 @@ const CustomLayout = (props) => {
             <Link to="/portfolio">Portfolio</Link>
           </Menu.Item>
           {props.isAuthenticated ? (
-            <Menu.Item>Logout</Menu.Item>
+            <Menu.Item onClick={props.logout}>Logout</Menu.Item>
           ) : (
             <Menu.Item>
               <Link to="/login">Login</Link>
@@ -39,4 +41,12 @@ const CustomLayout = (props) => {
   );
 };
 
-export default CustomLayout;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logout: () => {
+      dispatch(actions.logout());
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(CustomLayout);

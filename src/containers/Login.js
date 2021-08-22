@@ -8,19 +8,22 @@ import * as actions from "../store/actions/auth";
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const Login = (props) => {
+    
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
-    props.onAuth(values);
+    props.onAuth(values.username, values.password);
     // props.history.push("/");
   };
 
   let errorMessage = null;
   if (props.error) {
+      console.log('dude an error');
     errorMessage = <p>{props.error.message}</p>;
   }
 
   return (
     <>
+      <h1>Login</h1>
       {errorMessage}
       {props.loading ? (
         <Spin indicator={antIcon} />
@@ -32,8 +35,12 @@ const Login = (props) => {
             remember: true,
           }}
           onFinish={onFinish}
+          layout="horizontal"
+          wrapperCol={{ span: 6 }}
+          labelCol={{ span: 8 }}
         >
           <Form.Item
+            label="Username"
             name="username"
             rules={[
               {
@@ -48,6 +55,7 @@ const Login = (props) => {
             />
           </Form.Item>
           <Form.Item
+            label="Password"
             name="password"
             rules={[
               {
@@ -62,13 +70,14 @@ const Login = (props) => {
               placeholder="Password"
             />
           </Form.Item>
-          <Form.Item>
+
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>Remember me</Checkbox>
             </Form.Item>
           </Form.Item>
 
-          <Form.Item>
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button
               type="primary"
               htmlType="submit"
