@@ -1,5 +1,5 @@
 .space-align-block {
-  margin-bottom: 20px;
+  margin-bottom: 20px !important;
 }
 .ant-table-container {
   overflow-x: auto;
