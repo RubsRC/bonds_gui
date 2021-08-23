@@ -1,31 +1,43 @@
-import React from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import axios from "axios";
 
-import { Card } from 'antd'
+import { Card } from "antd";
 
-class BondDetailView extends React.Component {
+const BondDetailView = (props) => {
+  useEffect(() => {
+    fetchItem();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  state = {
-    bond: {}
-  }
-  componentDidMount() {
-    const bondID = this.props.match.params.bondID;
-    axios.get(`http://127.0.0.1:8000/api/bond/${bondID}/retrieve-update`)
-    .then(res => {
-      this.setState({
-        bond: res.data
-      });
-    })
-  }
+  const [bond, setBond] = useState([]);
 
-  render() {
-    const bond = this.state.bond;
-    return (
-      <Card title={bond.name}>
-          <p>Price tag: {bond.price}</p>
-      </Card>
-    );
-  }
-}
+  const bondID = props.match.params.bondID;
 
-export default BondDetailView;
+  const fetchItem = () => {
+    axios.defaults.headers = {
+      "Content-Type": "application/json",
+      Authorization: `Token ${props.token}`,
+    };
+    axios.get(`http://127.0.0.1:8000/api/bonds/${bondID}`).then((res) => {
+      console.log(res);
+      setBond(res.data);
+    });
+  };
+
+  return (
+    <Card title={bond.name}>
+      <p>Price: <b>{bond.price}</b></p>
+      <p>Total: <b>{bond.total}</b></p>
+      <p>Owner: <b>{bond.owner}</b></p>
+    </Card>
+  );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    token: state.auth.token,
+  };
+};
+
+export default connect(mapStateToProps)(BondDetailView);
