@@ -11,6 +11,12 @@ const Workspace = (props) => {
 
   const [bonds, setBonds] = useState([]);
 
+  const username = localStorage.getItem("username");
+
+  const purchaseable = (item) => {
+    return !item.buyer && item.owner !== username;
+  };
+
   const fetchItems = () => {
     axios.defaults.headers = {
       "Content-Type": "application/json",
@@ -20,7 +26,7 @@ const Workspace = (props) => {
       const results = res.data.map((row) => ({
         key: row.id, // add this for the data-row-key
         ...row,
-      }));
+      })).filter(purchaseable);
       setBonds(results);
     });
   };

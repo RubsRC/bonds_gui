@@ -15,7 +15,7 @@ const Portfolio = (props) => {
 
   const username = localStorage.getItem("username");
 
-  const bonoMePertenece = (item) => {
+  const belongsToMe = (item) => {
     return item.buyer ? item.buyer === username : item.owner === username;
   };
 
@@ -34,7 +34,7 @@ const Portfolio = (props) => {
           status,
           ...row,
         })})
-        .filter(bonoMePertenece);
+        .filter(belongsToMe);
       setBonds(results);
     });
   };

@@ -24,6 +24,8 @@ export const authFail = (error) => {
 export const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("expirationDate");
+  localStorage.removeItem("username");
+  localStorage.removeItem("userID");
   return {
     type: actionTypes.AUTH_LOGOUT,
   };
@@ -37,14 +39,26 @@ const checkAuthTimeout = (expirationTime) => {
   };
 };
 
-const handleAuthSuccess = (res, dispatch, username) => {
+const userData = (token) => {
+  axios.defaults.headers = {
+    "Content-Type": "application/json",
+    Authorization: `Token ${token}`,
+  };
+  console.log(token);
+  axios.get("http://127.0.0.1:8000/rest-auth/user/").then((res) => {
+    localStorage.setItem("username", res.data.username);
+    localStorage.setItem("userID", res.data.pk);
+  });
+};
+
+const handleAuthSuccess = (res, dispatch) => {
   const token = res.data.key;
   // 1 hour exp date
   const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
   // save both values in LS
   localStorage.setItem("token", token);
-  localStorage.setItem("username", username);
   localStorage.setItem("expirationDate", expirationDate);
+  userData(token);
   dispatch(authSuccess(token));
   checkAuthTimeout(3600);
 };
@@ -57,7 +71,7 @@ export const authLogin = (username, password) => {
         username,
         password,
       })
-      .then((res) => handleAuthSuccess(res, dispatch, username))
+      .then((res) => handleAuthSuccess(res, dispatch))
       .catch((error) => dispatch(authFail(error)));
   };
 };
@@ -72,7 +86,7 @@ export const authSignup = (username, email, password1, password2) => {
         password1,
         password2,
       })
-      .then((res) => handleAuthSuccess(res, dispatch, username))
+      .then((res) => handleAuthSuccess(res, dispatch))
       .catch((error) => dispatch(authFail(error)));
   };
 };

@@ -1,9 +1,35 @@
 import React from "react";
-import { Table, Space, Tag } from "antd";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { Table, Space, Tag, Button } from "antd";
 
 const { Column } = Table;
 
 const BasicTable = (props) => {
+  const history = useHistory();
+  const goBack = () => {
+    history.push("/portfolio");
+  };
+
+  const userID = localStorage.getItem("userID");
+
+  const buyBond = (bond) => {
+    axios.defaults.headers = {
+      "Content-Type": "application/json",
+      Authorization: `Token ${props.token}`,
+    };
+    axios
+      .patch(`http://127.0.0.1:8000/api/bonds/${bond.id}/`, {
+        buyer_id: userID,
+      })
+      .then((res) => {
+        console.log(res);
+        // todo: handle res status 400
+        goBack();
+      });
+  };
+
   return (
     <Table dataSource={props.data}>
       <Column title="ID" dataIndex="id" key="id" />
@@ -14,7 +40,6 @@ const BasicTable = (props) => {
         key="price"
         render={(text, recod) => <span>$ {recod.price}</span>}
       />
-      {/* <Column title="Currency" dataIndex="currency" key="currency" /> */}
       <Column title="Number" dataIndex="total" key="total" />
       <Column title="Seller" dataIndex="owner" key="owner" />
       {props.withStatus ? (
@@ -41,7 +66,7 @@ const BasicTable = (props) => {
           render={(text, record) => (
             <Space size="middle">
               <a href={`/bond/${record.id}`}>Detalles</a>
-              <a href="/">Comprar</a>
+              <Button onClick={() => buyBond(record)}>Comprar</Button>
             </Space>
           )}
         />
@@ -50,4 +75,10 @@ const BasicTable = (props) => {
   );
 };
 
-export default BasicTable;
+const mapStateToProps = (state) => {
+  return {
+    token: state.auth.token,
+  };
+};
+
+export default connect(mapStateToProps)(BasicTable);

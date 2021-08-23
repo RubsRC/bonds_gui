@@ -15,7 +15,7 @@ const CustomLayout = (props) => {
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["0"]}>
           <Menu.Item key="0">
-            <Link to="/">Workspace</Link>
+            <Link to="/">Marketplace</Link>
           </Menu.Item>
           <Menu.Item key="1">
             <Link to="/portfolio">Portfolio</Link>
