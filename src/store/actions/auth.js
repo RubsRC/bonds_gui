@@ -37,12 +37,13 @@ const checkAuthTimeout = (expirationTime) => {
   };
 };
 
-const handleAuthSuccess = (res, dispatch) => {
+const handleAuthSuccess = (res, dispatch, username) => {
   const token = res.data.key;
   // 1 hour exp date
   const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
   // save both values in LS
   localStorage.setItem("token", token);
+  localStorage.setItem("username", username);
   localStorage.setItem("expirationDate", expirationDate);
   dispatch(authSuccess(token));
   checkAuthTimeout(3600);
@@ -56,7 +57,7 @@ export const authLogin = (username, password) => {
         username,
         password,
       })
-      .then((res) => handleAuthSuccess(res, dispatch))
+      .then((res) => handleAuthSuccess(res, dispatch, username))
       .catch((error) => dispatch(authFail(error)));
   };
 };
@@ -71,7 +72,7 @@ export const authSignup = (username, email, password1, password2) => {
         password1,
         password2,
       })
-      .then((res) => handleAuthSuccess(res, dispatch))
+      .then((res) => handleAuthSuccess(res, dispatch, username))
       .catch((error) => dispatch(authFail(error)));
   };
 };

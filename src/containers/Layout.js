@@ -6,21 +6,26 @@ import * as actions from "../store/actions/auth";
 
 const { Header, Content, Footer } = Layout;
 const CustomLayout = (props) => {
+
+  const username = localStorage.getItem("username");
+
   return (
     <Layout className="layout">
       <Header>
         <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
-          <Menu.Item>
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["0"]}>
+          <Menu.Item key="0">
             <Link to="/">Workspace</Link>
           </Menu.Item>
-          <Menu.Item>
+          <Menu.Item key="1">
             <Link to="/portfolio">Portfolio</Link>
           </Menu.Item>
           {props.isAuthenticated ? (
-            <Menu.Item onClick={props.logout}>Logout</Menu.Item>
+            <Menu.Item key="2" onClick={props.logout}>
+              <Link to="/login">Logout</Link>
+            </Menu.Item>
           ) : (
-            <Menu.Item>
+            <Menu.Item key="3">
               <Link to="/login">Login</Link>
             </Menu.Item>
           )}
@@ -28,9 +33,7 @@ const CustomLayout = (props) => {
       </Header>
       <Content style={{ padding: "0 50px" }}>
         <Breadcrumb style={{ margin: "16px 0" }}>
-          <Breadcrumb.Item>
-            <Link to="/">Home</Link>
-          </Breadcrumb.Item>
+          <Breadcrumb.Item>Hello, {username}</Breadcrumb.Item>
         </Breadcrumb>
         <div className="site-layout-content">{props.children}</div>
       </Content>
@@ -51,7 +54,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => {
       dispatch(actions.logout());
-      this.history.push("/login");
     },
   };
 };

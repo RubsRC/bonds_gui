@@ -1,24 +1,23 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Form, Input, Button, Checkbox, Spin } from "antd";
+import { Form, Input, Button, Spin } from "antd";
 import { UserOutlined, LockOutlined, LoadingOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import * as actions from "../store/actions/auth";
 
+
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const Login = (props) => {
-    
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-    props.onAuth(values.username, values.password);
-    props.history.push("/");
-  };
-
   let errorMessage = null;
   if (props.error) {
     errorMessage = <p>{props.error.message}</p>;
   }
+
+  const onFinish = (values) => {
+    props.onAuth(values.username, values.password);
+    props.history.push("/");
+  };  
 
   return (
     <>
@@ -68,12 +67,6 @@ const Login = (props) => {
               type="password"
               placeholder="Password"
             />
-          </Form.Item>
-
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
