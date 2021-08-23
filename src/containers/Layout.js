@@ -41,12 +41,19 @@ const CustomLayout = (props) => {
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    authenticated: state.auth.token !== null,
+  };
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => {
       dispatch(actions.logout());
+      this.history.push("/login");
     },
   };
 };
 
-export default connect(null, mapDispatchToProps)(CustomLayout);
+export default connect(mapStateToProps, mapDispatchToProps)(CustomLayout);

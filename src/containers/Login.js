@@ -12,12 +12,11 @@ const Login = (props) => {
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
     props.onAuth(values.username, values.password);
-    // props.history.push("/");
+    props.history.push("/");
   };
 
   let errorMessage = null;
   if (props.error) {
-      console.log('dude an error');
     errorMessage = <p>{props.error.message}</p>;
   }
 
@@ -96,8 +95,9 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.loading,
-    error: state.error,
+    loading: state.auth.loading,
+    error: state.auth.error,
+    token: state.auth.token,
   };
 };
 
